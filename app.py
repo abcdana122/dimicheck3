@@ -2,10 +2,10 @@
 ## app.py
 from __future__ import annotations
 
-import logging, csv, json, requests
+import json
 from typing import Any
 
-from flask import Flask, jsonify, send_from_directory, session, request
+from flask import Flask, jsonify, request, send_from_directory, session
 from flask_cors import CORS
 from flask_smorest import Api
 from flask_socketio import SocketIO
@@ -15,7 +15,7 @@ from class_routes import blueprint as class_bp
 from exports_routes import blueprint as export_bp
 from config import config
 from extensions import db
-from models import PresenceState, ClassConfig, ClassPin
+from models import ClassConfig, ClassPin
 from utils import after_request, before_request, metrics, setup_logging
 from ws import namespaces
 
@@ -107,19 +107,18 @@ def index():  # type: ignore[override]
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    
-        for grade in range(1, 4):       # 1~3학년
-            for section in range(1, 7): # 1~6반
-                exists = ClassConfig.query.filter_by(grade=grade, section=section).first()
-            
-                if not exists:
 
-                    if (grade == 1 and section == 3):
+        for grade in range(1, 4):  # 1~3학년
+            for section in range(1, 7):  # 1~6반
+                exists = ClassConfig.query.filter_by(grade=grade, section=section).first()
+
+                if not exists:
+                    if grade == 1 and section == 3:
                         config = ClassConfig(
                             grade=grade,
                             section=section,
-                            end=31,                 # 기본 31번까지
-                            skip_numbers=json.dumps([12])  # 결번 없음
+                            end=31,  # 기본 31번까지
+                            skip_numbers=json.dumps([12]),  # 결번 없음
                         )
                         db.session.add(config)
                         continue
@@ -127,16 +126,16 @@ if __name__ == "__main__":
                     config = ClassConfig(
                         grade=grade,
                         section=section,
-                        end=30,                 # 기본 31번까지
-                        skip_numbers=json.dumps([])  # 결번 없음
+                        end=30,  # 기본 31번까지
+                        skip_numbers=json.dumps([]),  # 결번 없음
                     )
                     db.session.add(config)
 
                 existing_pin = ClassPin.query.filter_by(grade=grade, section=section).first()
                 if existing_pin:
-                    existing_pin.pin = grade*10+section   # 업데이트
+                    existing_pin.pin = grade * 10 + section  # 업데이트
                 else:
-                    pin = ClassPin(grade=grade, section=section, pin=grade*10+section)
+                    pin = ClassPin(grade=grade, section=section, pin=grade * 10 + section)
                     db.session.add(pin)
 
         db.session.commit()

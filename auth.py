@@ -1,19 +1,15 @@
 from __future__ import annotations
 
-import base64
-import json, os
 from typing import Any, Dict
 
 import requests
-from flask import Blueprint, redirect, request, session, url_for, jsonify, current_app, send_from_directory
-
-from flask import render_template
+from flask import Blueprint, jsonify, redirect, request, session
 from jose import jwt as jose_jwt
 from jose.exceptions import JWTError
 
 from config import config
 from extensions import db
-from models import User, UserType, ClassPin
+from models import User, UserType
 
 blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -119,11 +115,5 @@ def status():
         "role": user["type"],   # "teacher" or "student"
         "grade": user.get("grade"),
         "section": user.get("section"),
-        "number": user.get("number")
+        "number": user.get("number"),
     })
-
-def verify_pin(grade, section, input_pin):
-    record = ClassPin.query.filter_by(grade=grade, section=section).first()
-    if record and record.pin == input_pin:
-        return True
-    return False

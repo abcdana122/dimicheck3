@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from enum import Enum
 
-from sqlalchemy import UniqueConstraint, func
+from sqlalchemy import UniqueConstraint
 from extensions import db
 
 
@@ -77,10 +77,10 @@ class ClassConfig(db.Model):
     __tablename__ = "class_configs"
 
     id = db.Column(db.Integer, primary_key=True)
-    grade = db.Column(db.Integer, nullable=False)       # 학년
-    section = db.Column(db.Integer, nullable=False)     # 반
-    end = db.Column(db.Integer, nullable=False)         # 마지막 번호
-    skip_numbers = db.Column(db.Text, default="[]")     # JSON 문자열로 저장
+    grade = db.Column(db.Integer, nullable=False)  # 학년
+    section = db.Column(db.Integer, nullable=False)  # 반
+    end = db.Column(db.Integer, nullable=False)  # 마지막 번호
+    skip_numbers = db.Column(db.Text, default="[]")  # JSON 문자열로 저장
 
     __table_args__ = (
         db.UniqueConstraint("grade", "section", name="uniq_class_config"),
@@ -92,7 +92,8 @@ class ClassPin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     grade = db.Column(db.Integer, nullable=False)
     section = db.Column(db.Integer, nullable=False)
-    pin = db.Column(db.String(20), nullable=False)   # PIN (숫자/문자 모두 가능)
+    pin = db.Column(db.String(20), nullable=False)  # PIN (숫자/문자 모두 가능)
 
     # grade+section은 고유 조합
     __table_args__ = (db.UniqueConstraint("grade", "section", name="uq_class_section"),)
+

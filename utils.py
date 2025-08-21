@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import uuid
-from typing import Any, Dict
 
 from flask import Response, g, request
 from prometheus_client import Counter, Histogram, generate_latest

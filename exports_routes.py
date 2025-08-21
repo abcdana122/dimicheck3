@@ -1,12 +1,9 @@
 from __future__ import annotations
 
-from datetime import date
 from io import BytesIO
 from typing import Any
 
-from flask import Blueprint, Response, jsonify, request
-
-from extensions import db
+from flask import Blueprint, Response, request
 from models import PresenceState
 
 blueprint = Blueprint("exports", __name__, url_prefix="/api/exports")
@@ -16,7 +13,6 @@ blueprint = Blueprint("exports", __name__, url_prefix="/api/exports")
 def export_excel() -> Any:
     from openpyxl import Workbook  # type: ignore
 
-    req_date = request.args.get("date")
     grade = int(request.args.get("grade", 1))
     class_no = int(request.args.get("class", 1))
 
@@ -40,7 +36,6 @@ def export_excel() -> Any:
 @blueprint.post("/sheets/daily")
 def export_sheets_daily() -> Any:
     import base64
-    import json
 
     service_json_b64 = request.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON_B64")
     sheet_id = request.environ.get("GOOGLE_SHEET_ID")
@@ -49,3 +44,4 @@ def export_sheets_daily() -> Any:
     creds_json = base64.b64decode(service_json_b64)
     # 실제 구글 API 호출 생략 (stub)
     return ("", 204)
+

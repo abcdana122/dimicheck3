@@ -1,23 +1,17 @@
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Any
-
-from flask import Blueprint, abort, jsonify, request, session
-from marshmallow import ValidationError
-
-from flask import current_app
-from extensions import db
-from models import PresenceLog, PresenceState, PresenceStatus, User, UserType, ClassState, ClassConfig
-from schemas import LogQuerySchema, PresenceSnapshotSchema, PresenceUpdateSchema
-
 import json
+
+from flask import Blueprint, jsonify, request
+
+from extensions import db
+from models import ClassConfig, ClassState
 
 blueprint = Blueprint("classes", __name__, url_prefix="/api/classes")
 
 @blueprint.post("/state/save")
 def save_state():
-    grade   = request.args.get("grade", type=int)
+    grade = request.args.get("grade", type=int)
     section = request.args.get("section", type=int)
     if grade is None or section is None:
         return jsonify({"error": "missing grade/section"}), 400
