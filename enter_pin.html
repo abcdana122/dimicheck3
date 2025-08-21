@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>PIN 입력</title>
+  <style>
+    body { font-family: sans-serif; background: #f7f7f7; display:flex; justify-content:center; align-items:center; height:100vh; }
+    .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); width: 300px; }
+    .card h2 { margin-bottom: 20px; font-size: 20px; }
+    .error { color: red; margin-bottom: 10px; }
+    input { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #ccc; }
+    button { width: 100%; padding: 10px; border: none; border-radius: 6px; background: #4CAF50; color: white; font-weight: bold; cursor:pointer; }
+    button:hover { background: #45a049; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>{{ grade }}학년 {{ section }}반 칠판 PIN 입력</h2>
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+    <form method="POST">
+      <input type="password" name="pin" placeholder="PIN 입력" required>
+      <button type="submit">확인</button>
+    </form>
+  </div>
+</body>
+</html>
